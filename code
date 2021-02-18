@@ -1,0 +1,36 @@
+M862.3 P "[printer_model]" ; printer model check
+M862.1 P[nozzle_diameter] ; nozzle diameter check
+M83  ; extruder relative mode
+G90 ; use absolute coordinates
+G28 W ; home all axes without mesh bed leveling
+ 
+ 
+G1 X10 Y-3 Z30; move extruder above bed in front for easier cleaning
+M109 S155 ; wait for extruder temp
+M190 S[first_layer_bed_temperature] ; wait for bed temp
+G92 E0 ; reset extrusion distance
+G1 E-1.0000 F1800; Retract 1mm to prevent oozing.
+ 
+G80 ; run mesh bed leveling routine
+ 
+
+G1 Z30 F1000.0
+M109 S[first_layer_temperature] ; wait for extruder temp
+ 
+; go outside print area
+G1 Y-3.0 F1000.0
+
+;  purge line
+G1 X55.0 F2000.0
+G1 Z0.3 F1000.0
+G92 E0.0
+G1 X240.0 E25.0 F2200.0
+G1 Y-2.0 F1000.0
+G1 X55.0 E25 F1400.0
+G1 Z0.20 F1000.0
+G1 X5.0 E4.0 F1000.0
+M221 S{if layer_height<0.075}100{else}95{endif}
+ 
+; Don't change E values below. Excessive value can damage the printer.
+{if print_settings_id=~/(0.05mm ULTRADETAIL @MK3|0.07mm ULTRADETAIL @MK3|0.10mm DETAIL @MK3|0.15mm QUALITY @MK3|0.20mm QUALITY @MK3)/}M907 E430 ; set extruder motor current{endif}
+{if print_settings_id=~/(0.15mm SPEED @MK3|0.20mm SPEED @MK3|0.30mm DRAFT @MK3)/}M907 E538 ; set extruder motor current{endif}
