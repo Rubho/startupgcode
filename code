@@ -6,7 +6,7 @@ G28 W ; home all axes without mesh bed leveling
  
  
 G1 X10 Y-3 Z30; move extruder above bed in front for easier cleaning
-M109 S155 ; wait for extruder temp
+M104 S155 ; wait for extruder temp
 M190 S[first_layer_bed_temperature] ; wait for bed temp
 G92 E0 ; reset extrusion distance
 G1 E-1.0000 F1800; Retract 1mm to prevent oozing.
